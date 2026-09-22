@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DANNY DANSON</title>
+<link rel="stylesheet" href="style.css">
+<!-- Telegram Mini App SDK — даёт доступ к теме, кнопке "назад", отправке данных боту -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="logo">DANNY DANSON</div>
+    <button class="cart-btn" id="cart-btn">
+      КОРЗИНА <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </header>
+
+  <!-- ЭКРАН 1: КАТАЛОГ -->
+  <main id="catalog-view" class="view active">
+    <div class="grid" id="catalog-grid"></div>
+  </main>
+
+  <!-- ЭКРАН 2: КАРТОЧКА ТОВАРА -->
+  <main id="product-view" class="view">
+    <button class="back-btn" data-back="catalog">← Назад</button>
+    <div id="product-content"></div>
+  </main>
+
+  <!-- ЭКРАН 3: КОРЗИНА -->
+  <main id="cart-view" class="view">
+    <button class="back-btn" data-back="catalog">← Назад</button>
+    <h2 class="view-title">Корзина</h2>
+    <div id="cart-items"></div>
+    <div class="cart-summary" id="cart-summary"></div>
+  </main>
+
+  <!-- ЭКРАН 4: ОФОРМЛЕНИЕ ЗАКАЗА -->
+  <main id="checkout-view" class="view">
+    <button class="back-btn" data-back="cart">← Назад</button>
+    <h2 class="view-title">Оформление заказа</h2>
+    <form id="checkout-form">
+      <label>Имя
+        <input type="text" id="f-name" required>
+      </label>
+      <label>Телефон
+        <input type="tel" id="f-phone" required>
+      </label>
+      <label>Город
+        <input type="text" id="f-city" required>
+      </label>
+      <label>Комментарий (необязательно)
+        <textarea id="f-comment" rows="3"></textarea>
+      </label>
+      <button type="submit" class="submit-btn">ПОДТВЕРДИТЬ ЗАКАЗ</button>
+    </form>
+  </main>
+
+  <!-- ЭКРАН 5: ЗАКАЗ ОФОРМЛЕН -->
+  <main id="done-view" class="view">
+    <div class="done-box">
+      <div class="done-check">✓</div>
+      <p>Заказ оформлен. Мы свяжемся с тобой в ближайшее время.</p>
+      <button class="submit-btn" data-back="catalog">В каталог</button>
+    </div>
+  </main>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
