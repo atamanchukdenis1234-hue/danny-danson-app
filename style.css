@@ -10,7 +10,7 @@
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   padding-top: env(safe-area-inset-top, 0px);
 }
@@ -30,21 +30,46 @@ body {
 .logo {
   font-weight: 800;
   letter-spacing: 2px;
-  font-size: 16px;
+  font-size: 20px;
 }
 .cart-btn {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Работает и для <svg class="cart-icon">, и для <img class="cart-icon"> */
+.cart-icon {
+  display: block;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
   background: var(--fg);
   color: var(--bg);
-  border: none;
-  padding: 8px 14px;
+  font-size: 10px;
   font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 1px;
-  cursor: pointer;
+  line-height: 16px;
+  text-align: center;
+  transform: translate(40%, -30%);
+  pointer-events: none;
 }
-.cart-count {
-  margin-left: 4px;
-}
+.cart-count[hidden] { display: none; }
 
 /* ЭКРАНЫ — по умолчанию скрыты, .active показывает */
 .view { display: none; padding: 16px; max-width: 480px; margin: 0 auto; }
@@ -73,12 +98,14 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
-.product-card { cursor: pointer; }
 .product-card img {
   width: 100%;
   aspect-ratio: 4/5;
   object-fit: cover;
-  background: #f2f2f2;
+  background: var(--bg);   /* белое, не серое */
+  border: 0;
+  outline: 0;
+  display: block;
 }
 .product-card .p-name {
   font-size: 12px;
@@ -93,16 +120,24 @@ body {
 }
 
 /* КАРТОЧКА ТОВАРА */
+.product-gallery {
+  display: flex;
+  gap: 0;                     /* убираем зазор между слайдами */
+  overflow-x: auto;
+  margin-bottom: 16px;
+  scroll-snap-type: x mandatory;
+}
 .product-gallery img {
+  flex: 0 0 100%;
   width: 100%;
   aspect-ratio: 4/5;
   object-fit: cover;
-  margin-bottom: 6px;
-  background: #f2f2f2;
+  background: var(--bg);      /* белое, не серое */
+  border: 0;
+  outline: 0;
+  display: block;
+  scroll-snap-align: start;
 }
-.product-gallery { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 16px; }
-.product-gallery img { flex: 0 0 100%; scroll-snap-align: start; }
-.product-gallery { scroll-snap-type: x mandatory; }
 
 .p-title { font-size: 18px; font-weight: 800; text-transform: uppercase; }
 .p-detail-price { font-size: 16px; margin: 6px 0 16px 0; }
@@ -157,7 +192,16 @@ body {
   padding: 12px 0;
   border-bottom: 1px solid var(--line);
 }
-.cart-item img { width: 70px; height: 88px; object-fit: cover; background: #f2f2f2; }
+.cart-item img {
+  width: 70px;
+  height: 88px;
+  flex: 0 0 70px;         /* чтобы не растягивалось под текст */
+  background: var(--bg);
+  border: 0;
+  outline: 0;
+  display: block;
+  /* object-fit и aspect-ratio приходят из inline-стиля (imageStyleFor) */
+}
 .cart-item-info { flex: 1; }
 .cart-item-name { font-size: 13px; font-weight: 700; text-transform: uppercase; }
 .cart-item-meta { font-size: 12px; color: var(--gray); margin: 4px 0; }
@@ -200,3 +244,117 @@ body {
 .done-box { text-align: center; padding: 60px 20px; }
 .done-check { font-size: 40px; margin-bottom: 16px; }
 .done-box p { margin-bottom: 24px; font-size: 14px; color: #333; }
+
+/* АВТОЗАПОЛНЕНИЕ И ПОДСКАЗКА "ПРОВЕРЬ" */
+.input-autofilled {
+  background: #fffbe6;
+  border-color: #e0b900 !important;
+}
+
+.field-hint {
+  display: block;
+  font-size: 11px;
+  color: #b38f00;
+  margin-top: 4px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ОШИБКИ ВАЛИДАЦИИ */
+.input-error {
+  border-color: #d33 !important;
+  background: #fff5f5;
+}
+
+.field-error {
+  display: block;
+  font-size: 11px;
+  color: #d33;
+  margin-top: 4px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ПЛАВНОЕ ПОЯВЛЕНИЕ ФОТО */
+.product-card img,
+.product-gallery img,
+.cart-item img {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.product-card img.loaded,
+.product-gallery img.loaded,
+.cart-item img.loaded {
+  opacity: 1;
+}
+
+/* ИТОГО В КАРТОЧКЕ ТОВАРА */
+.p-total {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 8px 0 16px 0;
+}
+
+/* Чтобы цифры в ценах/итого были одной ширины и не «прыгали» */
+.p-price, .p-detail-price, .p-total, .cart-total-row, .cart-item-meta, .qty-val {
+  font-variant-numeric: tabular-nums;
+}
+
+/* БЛОКИ ОПИСАНИЯ: ПРЕИМУЩЕСТВА И ХАРАКТЕРИСТИКИ */
+.p-block {
+  margin-bottom: 20px;
+}
+.p-block-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* Преимущества — список с длинным тире */
+.p-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.p-bullets li {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  padding-left: 18px;
+  position: relative;
+}
+.p-bullets li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--fg);
+}
+
+/* Характеристики — пары ключ/значение */
+.p-specs {
+  font-size: 13px;
+}
+.p-spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.p-spec-row:last-child {
+  border-bottom: none;
+}
+.p-spec-key {
+  color: var(--gray);
+}
+.p-spec-val {
+  color: var(--fg);
+  font-weight: 500;
+  text-align: right;
+}

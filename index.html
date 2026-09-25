@@ -4,19 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DANNY DANSON</title>
+
+<!-- Шрифт Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
-<!-- Telegram Mini App SDK — даёт доступ к теме, кнопке "назад", отправке данных боту -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 
   <!-- ШАПКА -->
-  <header class="header">
-    <div class="logo">DANNY DANSON</div>
-    <button class="cart-btn" id="cart-btn">
-      КОРЗИНА <span class="cart-count" id="cart-count">0</span>
-    </button>
-  </header>
+<header class="header">
+  <div class="logo">ДЭННИ ДЭНСОН</div>
+
+  <!-- ИКОНКА КОРЗИНЫ.
+       Сейчас вставлена SVG-корзинка как заглушка.
+       Чтобы поставить свою — просто замени содержимое <svg>...</svg>
+       на свой <svg>, либо на <img src="icon.svg" class="cart-icon" alt="">
+  -->
+  <button class="cart-btn" id="cart-btn" aria-label="Корзина">
+    <svg class="cart-icon" viewBox="0 0 24 24" width="24" height="24"
+         fill="none" stroke="currentColor" stroke-width="1.8"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 4h2l2.4 12.2a2 2 0 0 0 2 1.8h8.7a2 2 0 0 0 2-1.6L21 8H6"/>
+      <circle cx="10" cy="20" r="1.4"/>
+      <circle cx="18" cy="20" r="1.4"/>
+    </svg>
+    <span class="cart-count" id="cart-count" hidden>0</span>
+  </button>
+</header>
 
   <!-- ЭКРАН 1: КАТАЛОГ -->
   <main id="catalog-view" class="view active">
@@ -41,21 +59,34 @@
   <main id="checkout-view" class="view">
     <button class="back-btn" data-back="cart">← Назад</button>
     <h2 class="view-title">Оформление заказа</h2>
-    <form id="checkout-form">
-      <label>Имя
-        <input type="text" id="f-name" required>
-      </label>
-      <label>Телефон
-        <input type="tel" id="f-phone" required>
-      </label>
-      <label>Город
-        <input type="text" id="f-city" required>
-      </label>
-      <label>Комментарий (необязательно)
-        <textarea id="f-comment" rows="3"></textarea>
-      </label>
-      <button type="submit" class="submit-btn">ПОДТВЕРДИТЬ ЗАКАЗ</button>
-    </form>
+<form id="checkout-form" novalidate>
+  <label>ФИО
+    <input type="text" id="f-fio" autocomplete="name" placeholder="Иванов Иван">
+  </label>
+
+  <label>Ник в Telegram
+    <input type="text" id="f-tgnick" autocomplete="off" placeholder="@username">
+    <span class="field-hint" id="hint-tgnick" hidden>Проверь, всё ли верно. Если ник скрыт — впиши свой вручную</span>
+  </label>
+
+  <label>Телефон
+    <input type="tel" id="f-phone" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+  </label>
+
+  <label>Город
+    <input type="text" id="f-city" autocomplete="address-level2" placeholder="Москва">
+  </label>
+
+  <label>Адрес ПВЗ / пункта выдачи
+    <input type="text" id="f-pvz" autocomplete="street-address" placeholder="СДЭК, ул. Ленина, 5">
+  </label>
+
+  <label>Комментарий (необязательно)
+    <textarea id="f-comment" rows="3"></textarea>
+  </label>
+
+  <button type="submit" class="submit-btn">ПОДТВЕРДИТЬ ЗАКАЗ</button>
+</form>
   </main>
 
   <!-- ЭКРАН 5: ЗАКАЗ ОФОРМЛЕН -->
